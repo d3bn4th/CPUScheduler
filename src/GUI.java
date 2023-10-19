@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class GUI
 {
+    // Initializing different components of the GUI 
     private JFrame frame;
     private JPanel mainPanel;
     private CustomPanel chartPanel;
@@ -37,7 +38,7 @@ public class GUI
     // Constructor to initialize  the components of the GUI(JTable, JButton, JLabel, and JComboBox objects, and sets their properties.)
     public GUI()
     {
-        // sets the column  name and the row count
+        // sets the column names and the row count(initially 0)
         model = new DefaultTableModel(new String[]{"Process", "AT", "BT", "Priority", "WT", "TAT"}, 0); 
         
         table = new JTable(model);
