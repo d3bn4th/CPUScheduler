@@ -182,7 +182,7 @@ public class GUI
         
         // adds all the components to the mainPanel
         mainPanel = new JPanel(null);
-        mainPanel.setPreferredSize(new Dimension(500, 500));
+        mainPanel.setPreferredSize(new Dimension(500, 500)); // setting the dimensions
         mainPanel.add(tablePane);
         mainPanel.add(addBtn);
         mainPanel.add(removeBtn);
