@@ -8,7 +8,7 @@ public abstract class CPUScheduler
     private final List<Event> timeline;
     private int timeQuantum;
     
-    public CPUScheduler()
+    public CPUScheduler() // constructor
     {
         rows = new ArrayList();
         timeline = new ArrayList();
@@ -30,7 +30,7 @@ public abstract class CPUScheduler
         return timeQuantum;
     }
     
-    public double getAverageWaitingTime()
+    public double getAverageWaitingTime() // calculates the average waiting time
     {
         double avg = 0.0;
         
@@ -42,7 +42,7 @@ public abstract class CPUScheduler
         return avg / rows.size();
     }
     
-    public double getAverageTurnAroundTime()
+    public double getAverageTurnAroundTime() // calculates the average turn around time
     {
         double avg = 0.0;
         

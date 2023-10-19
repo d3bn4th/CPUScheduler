@@ -5,7 +5,7 @@ public class Event
     private final int startTime;
     private int finishTime;
     
-    public Event(String processName, int startTime, int finishTime)
+    public Event(String processName, int startTime, int finishTime) // constructor
     {
         this.processName = processName;
         this.startTime = startTime;

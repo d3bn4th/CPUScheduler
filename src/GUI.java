@@ -34,25 +34,29 @@ public class GUI
     private JComboBox option;
     private DefaultTableModel model;
     
+    // Constructor to initialize  the components of the GUI(JTable, JButton, JLabel, and JComboBox objects, and sets their properties.)
     public GUI()
     {
-        model = new DefaultTableModel(new String[]{"Process", "AT", "BT", "Priority", "WT", "TAT"}, 0);
+        // sets the column  name and the row count
+        model = new DefaultTableModel(new String[]{"Process", "AT", "BT", "Priority", "WT", "TAT"}, 0); 
         
         table = new JTable(model);
         table.setFillsViewportHeight(true);
         tablePane = new JScrollPane(table);
         tablePane.setBounds(25, 25, 450, 250);
-        
+        // Add Button : to an empty row for process description
         addBtn = new JButton("Add");
         addBtn.setBounds(300, 280, 85, 25);
         addBtn.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        addBtn.addActionListener(new ActionListener(){
+        addBtn.addActionListener(
+            new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.addRow(new String[]{"", "", "", "", "", ""});
+                model.addRow(new String[]{"", "", "", "", "", ""}); // adds an empty row
             } 
         });
-        
+
+        // Remove Button : to remove a selected row
         removeBtn = new JButton("Remove");
         removeBtn.setBounds(390, 280, 85, 25);
         removeBtn.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -67,28 +71,37 @@ public class GUI
             }
         });
         
+        // * Panel to display the Gantt Chart
         chartPanel = new CustomPanel();
-//        chartPanel.setPreferredSize(new Dimension(700, 10));
-        chartPanel.setBackground(Color.WHITE);
+        //chartPanel.setPreferredSize(new Dimension(700, 10));
+        chartPanel.setBackground(Color.lightGray);
         chartPane = new JScrollPane(chartPanel);
-        chartPane.setBounds(25, 310, 450, 100);
+        chartPane.setBounds(25, 310, 450, 100); // positions the object in the panel
         
+        // * Panel for AWT and TAT Results
         wtLabel = new JLabel("Average Waiting Time:");
         wtLabel.setBounds(25, 425, 180, 25);
+        // void java.awt.Component.setBounds(int x, int y, int width, int height)
+        
         tatLabel = new JLabel("Average Turn Around Time:");
         tatLabel.setBounds(25, 450, 180, 25);
+
         wtResultLabel = new JLabel();
         wtResultLabel.setBounds(215, 425, 180, 25);
+        
         tatResultLabel = new JLabel();
         tatResultLabel.setBounds(215, 450, 180, 25);
         
+        // * drop-down menu in the  GUI that allows the user to select a scheduling algorithm.
+        //  The available algorithms are "FCFS" (First-Come, First-Served), "SJF" (Shortest Job First), "SRT" (Shortest Remaining Time), "PSN" (Priority Scheduling - Non-preemptive), "PSP" (Priority Scheduling - Preemptive), and "RR" (Round Robin).
         option = new JComboBox(new String[]{"FCFS", "SJF", "SRT", "PSN", "PSP", "RR"});
         option.setBounds(390, 420, 85, 20);
         
+        // Compute Button
         computeBtn = new JButton("Compute");
         computeBtn.setBounds(390, 450, 85, 25);
         computeBtn.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        computeBtn.addActionListener(new ActionListener(){
+        computeBtn.addActionListener(new ActionListener(){ // what happens when clicked
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selected = (String) option.getSelectedItem();
@@ -111,12 +124,13 @@ public class GUI
                         scheduler = new PriorityPreemptive();
                         break;
                     case "RR":
+                        // When Round Robin is selected it prompts the  user to enter the quantum time needed for the algorithm
                         String tq = JOptionPane.showInputDialog("Time Quantum");
                         if (tq == null) {
                             return;
                         }
                         scheduler = new RoundRobin();
-                        scheduler.setTimeQuantum(Integer.parseInt(tq)); 
+                        scheduler.setTimeQuantum(Integer.parseInt(tq));//passes the QT to the object
                         break;
                     default:
                         return;
@@ -165,6 +179,7 @@ public class GUI
             }
         });
         
+        // adds all the components to the mainPanel
         mainPanel = new JPanel(null);
         mainPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.add(tablePane);
@@ -178,7 +193,7 @@ public class GUI
         mainPanel.add(option);
         mainPanel.add(computeBtn);
         
-        frame = new JFrame("CPU Scheduler Simulator");
+        frame = new JFrame("CPU Scheduler Simulator - by Rahul(09), Arya(059) & Arihant(033)");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
@@ -186,11 +201,15 @@ public class GUI
         frame.pack();
     }
     
+    // * Main Method
     public static void main(String[] args)
     {
-        new GUI();
+        new GUI(); // initializes the components of the GUI and displays on the Screen  
     }
     
+    // to draw/update a timeline of events on the panel based on a given list of Event objects.
+    // helps drawing the Gantt Chart 
+    // the CustomPanel class provides a visual representation of the timeline of events
     class CustomPanel extends JPanel
     {   
         private List<Event> timeline;
@@ -202,36 +221,33 @@ public class GUI
             
             if (timeline != null)
             {
-//                int width = 30;
+                // int width = 30;
                 
                 for (int i = 0; i < timeline.size(); i++)
                 {
-                    Event event = timeline.get(i);
-                    int x = 30 * (i + 1);
+                    Event event = timeline.get(i); // gets the event/process
+                    int x = 30 * (i + 1);  // positions the event in the panel ,setting (x,y) coordinates
                     int y = 20;
                     
-                    g.drawRect(x, y, 30, 30);
+                    g.drawRect(x, y, 30, 30); // draws a 30x30 rectangle
                     g.setFont(new Font("Segoe UI", Font.BOLD, 13));
-                    g.drawString(event.getProcessName(), x + 10, y + 20);
+                    g.drawString(event.getProcessName(), x + 10, y + 20); // adds the event/process
                     g.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-                    g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45);
+                    g.drawString(Integer.toString(event.getStartTime()), x - 5, y + 45); // adds the timeline
                     
                     if (i == timeline.size() - 1)
                     {
                         g.drawString(Integer.toString(event.getFinishTime()), x + 27, y + 45);
                     }
-                    
-//                    width += 30;
                 }
-                
-//                this.setPreferredSize(new Dimension(width, 75));
             }
         }
-        
-        public void setTimeline(List<Event> timeline)
+        // called whenever the timeline of the event changes, such as when a new process is added or when a process is completed
+        public void setTimeline(List<Event> timeline) // List of Events : an updated timeline of the events
         {
-            this.timeline = timeline;
-            repaint();
+            this.timeline = timeline; // updates the timeline
+            // app-triggered painting : allow program to asynchronously request a paint operation
+            repaint(); 
         }
     }
 }
